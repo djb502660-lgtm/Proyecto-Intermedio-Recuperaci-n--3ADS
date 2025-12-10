@@ -15,10 +15,11 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
             <a class="navbar-brand" href="../home/index.html">📚 Biblioteca</a>
-            <div>
-                <a href="../usuarios/usuarios.html" class="btn btn-outline-light btn-sm me-2">Usuarios</a>
-                <a href="./libros.html" class="btn btn-light btn-sm me-2">Libros</a>
+            <div class="d-flex gap-2">
+                <a href="../usuarios/usuarios.html" class="btn btn-outline-light btn-sm">Usuarios</a>
+                <a href="./libros.html" class="btn btn-light btn-sm">Libros</a>
                 <a href="../prestamos/prestamos.html" class="btn btn-outline-light btn-sm">Préstamos</a>
+                <button class="btn btn-outline-danger btn-sm" id="logout-btn" type="button">Cerrar sesión</button>
             </div>
         </div>
     </nav>
@@ -53,7 +54,9 @@
 
     </div>
 
-    <script type="module" src="../../../js/libros.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="../../js/logout.js"></script>
+    <script type="module" src="../../js/libros.js"></script>
 
 </body>
 </html>

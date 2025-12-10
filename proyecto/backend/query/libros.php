@@ -4,7 +4,7 @@
 
 header("Content-Type: application/json; charset=utf-8");
 
-require_once __DIR__ . "/../dbdconexion/db_conexion.php";
+require_once __DIR__ . "/../dbconexion/db_conexion.php";
 
 $conn = dbconexion::conectar();
 $accion = $_POST["action"] ?? $_GET["action"] ?? "";

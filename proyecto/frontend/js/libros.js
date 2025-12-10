@@ -1,5 +1,6 @@
-const response = await fetch(`${API_URL}?accion=contar_libros`);
 import { API_URL } from "./config.js";
+
+const LIBROS_URL = "http://localhost/Proyecto-Intermedio-Recuperaci-n--3ADS/proyecto/backend/query/libros.php";
 // --- ELEMENTOS DEL DOM ---
 const tablaLibros = document.getElementById("tablaLibros");
 const formAgregar = document.getElementById("formAgregarLibro");
@@ -11,7 +12,7 @@ const formEliminar = document.getElementById("formEliminarLibro");
  */
 async function cargarLibros() {
     try {
-        const response = await fetch(`${API_URL}?action=mostrar_libros`);
+        const response = await fetch(`${LIBROS_URL}?action=mostrar_libros`);
         
         // Clonamos la respuesta para poder leerla dos veces (una como texto, otra como json)
         const responseClone = response.clone();
@@ -41,6 +42,7 @@ async function cargarLibros() {
                     <td class="text-center">
                         <a href="editar_libro.html?id=${libro.id_libro}" class="btn btn-warning btn-sm">✏️ Editar</a>
                         <a href="eliminar_libro.html?id=${libro.id_libro}" class="btn btn-danger btn-sm">🗑️ Eliminar</a>
+                        <a href="ver_libro.html?id=${libro.id_libro}" class="btn btn-secondary btn-sm">👁️ Ver</a>
                     </td>
                 </tr>
             `).join('');
@@ -62,7 +64,7 @@ async function cargarLibros() {
  */
 async function cargarLibroParaEditar(id) {
     try {
-        const res = await fetch(`${API_URL}?action=obtener_libro&id_libro=${id}`);
+        const res = await fetch(`${LIBROS_URL}?action=obtener_libro&id_libro=${id}`);
         const data = await res.json();
 
         if (data.success && data.data) {
@@ -92,7 +94,7 @@ async function enviarFormulario(e) {
     const formData = new FormData(e.target);
 
     try {
-        const res = await fetch(API_URL, { method: "POST", body: formData });
+        const res = await fetch(LIBROS_URL, { method: "POST", body: formData });
         const data = await res.json();
 
         alert(data.message || "Operación procesada.");

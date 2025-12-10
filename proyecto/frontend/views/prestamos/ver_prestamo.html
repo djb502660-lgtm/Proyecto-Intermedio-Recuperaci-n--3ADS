@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ver préstamo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body class="bg-light">
+    <div class="container py-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="mb-0">Detalle del préstamo</h3>
+            <div class="d-flex gap-2">
+                <a href="prestamos.html" class="btn btn-outline-secondary btn-sm">Volver</a>
+                <button id="logout-btn" class="btn btn-outline-danger btn-sm" type="button">Cerrar sesión</button>
+            </div>
+        </div>
+        <div class="card shadow-sm">
+            <div class="card-body" id="detalle-prestamo">
+                Cargando...
+            </div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module">
+        import { API_URL } from "../../js/config.js";
+        import "../../js/logout.js";
+
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get("id");
+        const cont = document.getElementById("detalle-prestamo");
+
+        async function cargar() {
+            if (!id) {
+                cont.textContent = "ID no especificado.";
+                return;
+            }
+            try {
+                const res = await fetch(`${API_URL}?action=obtener_prestamo&id_prestamos=${id}`);
+                const data = await res.json();
+                if (!data.success || !data.data) {
+                    cont.textContent = data.message || "No se pudo obtener el préstamo.";
+                    return;
+                }
+                const p = data.data;
+                cont.innerHTML = `
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Usuario</label>
+                            <div class="form-control-plaintext">${p.usuario} (ID: ${p.id_usuario})</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Libro</label>
+                            <div class="form-control-plaintext">${p.libro} (ID: ${p.id_libro})</div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">Fecha préstamo</label>
+                            <div class="form-control-plaintext">${p.fecha_prestamo}</div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">Fecha devolución</label>
+                            <div class="form-control-plaintext">${p.fecha_devolucion || "N/A"}</div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">Estado</label>
+                            <div class="form-control-plaintext text-capitalize">${p.estado}</div>
+                        </div>
+                        <div class="col-12 mt-3">
+                            <a class="btn btn-warning me-2" href="editar_prestamos.html?id=${p.id_prestamos}">Editar</a>
+                            <a class="btn btn-outline-secondary" href="prestamos.html">Volver al listado</a>
+                        </div>
+                    </div>
+                `;
+            } catch (e) {
+                cont.textContent = "Error al cargar el préstamo.";
+            }
+        }
+
+        cargar();
+    </script>
+</body>
+</html>
+

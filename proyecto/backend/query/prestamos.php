@@ -4,10 +4,11 @@
 
 header("Content-Type: application/json; charset=utf-8");
 
-require_once __DIR__ . "/../dbdconexion/db_conexion.php";
+require_once __DIR__ . "/../dbconexion/db_conexion.php";
 
 $conn = dbconexion::conectar();
 $accion = $_POST["action"] ?? $_GET["action"] ?? "";
+$primaryKey = "id_prestamos"; // coincide con el dump SQL
 
 function responder(bool $success, array $payload = [], int $status = 200): void
 {
@@ -48,11 +49,12 @@ if ($accion === "crear_prestamo") {
 // Listar préstamos (con nombres de usuario/libro)
 if ($accion === "mostrar_prestamos") {
     try {
-        $sql = "SELECT p.*, u.nombre AS usuario, l.titulo AS libro
+        $sql = "SELECT p.$primaryKey, p.id_usuario, p.id_libro, p.fecha_prestamo, p.fecha_devolucion, p.estado,
+                       u.nombre AS usuario, l.titulo AS libro
                 FROM prestamos p
                 INNER JOIN usuarios u ON p.id_usuario = u.id_usuario
                 INNER JOIN libros l ON p.id_libro = l.id_libro
-                ORDER BY p.id_prestamo DESC";
+                ORDER BY p.$primaryKey DESC";
         $stmt = $conn->query($sql);
         responder(true, ["data" => $stmt->fetchAll(PDO::FETCH_ASSOC)]);
     } catch (Exception $e) {
@@ -62,14 +64,14 @@ if ($accion === "mostrar_prestamos") {
 
 // Obtener préstamo por ID
 if ($accion === "obtener_prestamo") {
-    $id = (int)($_GET["id_prestamo"] ?? 0);
+    $id = (int)($_GET[$primaryKey] ?? 0);
 
     if (!$id) {
         responder(false, ["message" => "ID requerido."], 400);
     }
 
     try {
-        $stmt = $conn->prepare("SELECT * FROM prestamos WHERE id_prestamo = :id LIMIT 1");
+        $stmt = $conn->prepare("SELECT * FROM prestamos WHERE $primaryKey = :id LIMIT 1");
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
         $stmt->execute();
 
@@ -81,7 +83,7 @@ if ($accion === "obtener_prestamo") {
 
 // Editar préstamo
 if ($accion === "editar_prestamo") {
-    $id = (int)($_POST["id_prestamo"] ?? 0);
+    $id = (int)($_POST[$primaryKey] ?? 0);
     $id_usuario = (int)($_POST["id_usuario"] ?? 0);
     $id_libro = (int)($_POST["id_libro"] ?? 0);
     $fecha_prestamo = trim($_POST["fecha_prestamo"] ?? "");
@@ -99,7 +101,7 @@ if ($accion === "editar_prestamo") {
                     fecha_prestamo = :fecha_prestamo,
                     fecha_devolucion = :fecha_devolucion,
                     estado = :estado
-                WHERE id_prestamo = :id";
+                WHERE $primaryKey = :id";
 
         $stmt = $conn->prepare($sql);
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
@@ -118,14 +120,14 @@ if ($accion === "editar_prestamo") {
 
 // Eliminar préstamo
 if ($accion === "eliminar_prestamo") {
-    $id = (int)($_POST["id_prestamo"] ?? 0);
+    $id = (int)($_POST[$primaryKey] ?? 0);
 
     if (!$id) {
         responder(false, ["message" => "ID requerido."], 400);
     }
 
     try {
-        $stmt = $conn->prepare("DELETE FROM prestamos WHERE id_prestamo = :id LIMIT 1");
+        $stmt = $conn->prepare("DELETE FROM prestamos WHERE $primaryKey = :id LIMIT 1");
         $stmt->bindParam(":id", $id, PDO::PARAM_INT);
         $stmt->execute();
 

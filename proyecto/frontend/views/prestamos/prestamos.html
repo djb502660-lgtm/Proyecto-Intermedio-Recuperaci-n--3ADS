@@ -13,21 +13,22 @@
 
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container">
-            <a class="navbar-brand" href="../home/index.html">📚 Biblioteca</a>
-            <div>
-                <a href="../usuarios/usuarios.html" class="btn btn-outline-light btn-sm me-2">Usuarios</a>
-                <a href="../libros/libros.html" class="btn btn-outline-light btn-sm me-2">Libros</a>
-                <a href="./prestamos.html" class="btn btn-light btn-sm">Préstamos</a>
+            <div class="container">
+                <a class="navbar-brand" href="../home/index.html">📚 Biblioteca</a>
+                <div class="d-flex gap-2">
+                    <a href="../usuarios/usuarios.html" class="btn btn-outline-light btn-sm">Usuarios</a>
+                    <a href="../libros/libros.html" class="btn btn-outline-light btn-sm">Libros</a>
+                    <a href="./prestamos.html" class="btn btn-light btn-sm">Préstamos</a>
+                    <button class="btn btn-outline-danger btn-sm" id="logout-btn" type="button">Cerrar sesión</button>
+                </div>
             </div>
-        </div>
-    </nav>
+        </nav>
 
     <div class="container my-4">
         <h2 class="text-center mb-4">Gestión de Préstamos</h2>
 
         <div class="text-end mb-3">
-            <a href="agregar_prestamos.html" class="btn btn-success">➕ Registrar Préstamo</a>
+                        <a href="agregar_prestamos.html" class="btn btn-success">➕ Registrar Préstamo</a>
         </div>
 
         <div class="card shadow">
@@ -53,6 +54,7 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script type="module" src="/proyecto/frontend/js/prestamos.js"></script>
+    <script type="module" src="../../js/logout.js"></script>
+    <script type="module" src="../../js/prestamos.js"></script>
 </body>
 </html>
